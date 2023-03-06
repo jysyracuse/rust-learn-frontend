@@ -1,7 +1,7 @@
-import { FunctionComponent } from 'react';
+import React from 'react';
 import Head from 'next/head';
 
-const Index: FunctionComponent = () => {
+const Index: React.FC = () => {
   return (
     <>
       <Head>

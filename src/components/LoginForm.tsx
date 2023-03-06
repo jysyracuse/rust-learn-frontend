@@ -1,25 +1,36 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import {
   EuiButton,
   EuiFieldText,
   EuiForm,
   EuiFormRow,
   EuiFieldPassword,
+  EuiCallOut,
 } from '@elastic/eui';
 import fetchData from '@/lib/fetch';
+import storage from '@/lib/storage';
 
 const LoginForm = ({ formObj }) => {
   const { register, formState, handleSubmit, setValue, setError } = formObj;
+  const [successCallout, setSuccessCallout] = useState<string | null>(null);
 
   const onSubmit = async data => {
-    console.log(formState.errors);
-    alert(JSON.stringify(data, null, 2));
+    setSuccessCallout(null);
     const fetchRes = await fetchData({
       method: 'POST',
       url: `/login`,
       body: data,
     });
-    console.log(fetchRes);
+    if (fetchRes.code === 200) {
+      storage.set(
+        'user',
+        JSON.stringify({
+          id: fetchRes.data.id,
+          name: fetchRes.data.name,
+        })
+      );
+      setSuccessCallout(fetchRes.data.name);
+    }
   };
 
   useEffect(() => {
@@ -33,24 +44,31 @@ const LoginForm = ({ formObj }) => {
 
   return (
     <>
-      <h1>请登录</h1>
+      <h1>Login</h1>
+      {successCallout ? (
+        <EuiCallOut size="s" title="Login Success!" color="success" iconType="user">
+          <p>Welcome, {successCallout}</p>
+        </EuiCallOut>
+      ) : null}
       <EuiForm component="form" onSubmit={handleSubmit(onSubmit)}>
-        <EuiFormRow label="用户名" helpText={formState.errors.name?.message}>
+        <EuiFormRow label="Username" helpText={formState.errors.name?.message}>
           <EuiFieldText
             onChange={e => setValue('name', e.target.value)}
-            placeholder="请输入用户名"
+            placeholder="Please Input Username"
           />
         </EuiFormRow>
-        <EuiFormRow label="密码" helpText={formState.errors.password?.message}>
+        <EuiFormRow
+          label="Password"
+          helpText={formState.errors.password?.message}>
           <EuiFieldPassword
             onChange={e => setValue('password', e.target.value)}
-            placeholder="请输入密码"
+            placeholder="Please Input Password"
           />
         </EuiFormRow>
-        <EuiButton type="submit">登录</EuiButton>
+        <EuiButton fill type="submit">
+          Login
+        </EuiButton>
       </EuiForm>
-      <div>{JSON.stringify(formState.errors.name)}</div>
-      <div>{JSON.stringify(formState.errors.password)}</div>
     </>
   );
 };

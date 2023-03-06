@@ -15,18 +15,20 @@ const Login: React.FC = () => {
       <Head>
         <title>Login</title>
       </Head>
-      <EuiFlexGroup justifyContent="spaceAround" alignItems="center">
-        <EuiFlexItem>
-          <EuiPanel>
-            <RegisterForm formObj={registerForm} />
-          </EuiPanel>
-        </EuiFlexItem>
-        <EuiFlexItem>
-          <EuiPanel>
-            <LoginForm formObj={loginForm} />
-          </EuiPanel>
-        </EuiFlexItem>
-      </EuiFlexGroup>
+      <div className="page-container">
+        <EuiFlexGroup justifyContent="spaceAround" alignItems="center">
+          <EuiFlexItem>
+            <EuiPanel>
+              <RegisterForm formObj={registerForm} />
+            </EuiPanel>
+          </EuiFlexItem>
+          <EuiFlexItem>
+            <EuiPanel>
+              <LoginForm formObj={loginForm} />
+            </EuiPanel>
+          </EuiFlexItem>
+        </EuiFlexGroup>
+      </div>
     </>
   );
 };

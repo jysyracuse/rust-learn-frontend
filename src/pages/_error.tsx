@@ -1,4 +1,4 @@
-import React, { FunctionComponent } from 'react';
+import React from 'react';
 import Error, { ErrorProps } from 'next/error';
 
 /**
@@ -7,7 +7,7 @@ import Error, { ErrorProps } from 'next/error';
  *
  * https://nextjs.org/docs/advanced-features/custom-error-page
  */
-const ErrorWrapper: FunctionComponent<ErrorProps> = ({ statusCode }) => {
+const ErrorWrapper: React.FC<ErrorProps> = ({ statusCode }) => {
   return <Error statusCode={statusCode} />;
 };
 
