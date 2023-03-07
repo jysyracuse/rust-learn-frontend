@@ -46,7 +46,11 @@ const LoginForm = ({ formObj }) => {
     <>
       <h1>Login</h1>
       {successCallout ? (
-        <EuiCallOut size="s" title="Login Success!" color="success" iconType="user">
+        <EuiCallOut
+          size="s"
+          title="Login Success!"
+          color="success"
+          iconType="user">
           <p>Welcome, {successCallout}</p>
         </EuiCallOut>
       ) : null}

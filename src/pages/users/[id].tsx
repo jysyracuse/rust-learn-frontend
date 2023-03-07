@@ -1,11 +1,24 @@
 import React, { useState, useEffect } from 'react';
 import { useRouter } from 'next/router';
-import { EuiDescriptionList } from '@elastic/eui';
+import { useForm } from 'react-hook-form';
+
+import {
+  EuiDescriptionList,
+  EuiModal,
+  EuiModalBody,
+  EuiModalHeader,
+  EuiModalHeaderTitle,
+  EuiOverlayMask,
+  EuiButton,
+} from '@elastic/eui';
 import fetchData from '@/lib/fetch';
+import UpdatePasswordForm from '@/components/UpdatePasswordForm';
 
 const User: React.FC = () => {
   const router = useRouter();
-  const [userData, setUserData] = useState<[]>([]);
+  const [userData, setUserData] = useState<any[]>([]);
+  const [passwordModalCtrl, setPasswordModalCtrl] = useState<boolean>(false);
+  const updatePasswordForm = useForm();
 
   useEffect(() => {
     (async () => {
@@ -27,6 +40,21 @@ const User: React.FC = () => {
     // }
   }, []);
 
+  const passwordModal = passwordModalCtrl ? (
+    <EuiOverlayMask>
+      <EuiModal
+        onClose={() => setPasswordModalCtrl(false)}
+        initialFocus="[name=popswitch]">
+        <EuiModalHeader>
+          <EuiModalHeaderTitle>Update Password</EuiModalHeaderTitle>
+        </EuiModalHeader>
+        <EuiModalBody>
+          <UpdatePasswordForm formObj={updatePasswordForm} />
+        </EuiModalBody>
+      </EuiModal>
+    </EuiOverlayMask>
+  ) : null;
+
   return (
     <>
       <div className="page-container">
@@ -37,7 +65,11 @@ const User: React.FC = () => {
           listItems={userData}
           style={{ maxWidth: '400px' }}
         />
+        <EuiButton onClick={() => setPasswordModalCtrl(true)}>
+          Update Password
+        </EuiButton>
       </div>
+      {passwordModal}
     </>
   );
 };
