@@ -34,10 +34,13 @@ const fetchData = async (params: requestOptions) => {
 
   const res = await fetch(`${process.env.API_URL}${url}?${qsStr}`, opt);
   if (res.status >= 400) {
-    // if (res.status === 401) {
-    //   // eventHandler(events.LOGIN_NEED, '请先登录')
-    //   return (window.location.href = '/');
-    // }
+    if (res.status === 404) {
+      return {
+        data: '',
+        code: '404',
+        message: 'Path Not Found',
+      };
+    }
     // return eventHandler(events.FETCH_FAILED, res.statusText)
   }
   // console.log(res.statusCode)

@@ -1,7 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { useRouter } from 'next/router';
 import { useForm } from 'react-hook-form';
-
 import {
   EuiDescriptionList,
   EuiModal,
@@ -14,31 +13,38 @@ import {
 import fetchData from '@/lib/fetch';
 import UpdatePasswordForm from '@/components/UpdatePasswordForm';
 
-const User: React.FC = () => {
+interface IOwnProps {
+  addToast?: void;
+  children?: React.ReactNode;
+}
+
+const User: React.FC<IOwnProps> = ({ addToast }) => {
   const router = useRouter();
   const [userData, setUserData] = useState<any[]>([]);
   const [passwordModalCtrl, setPasswordModalCtrl] = useState<boolean>(false);
   const updatePasswordForm = useForm();
-
+  // const { addToast } = props;
   useEffect(() => {
     (async () => {
-      const fetchRes = await fetchData({
-        method: 'GET',
-        url: `/users/${router.query.id}`,
-      });
-      if (fetchRes.code === '200') {
-        const userDesc = Object.keys(fetchRes.data).map((keyName: string) => {
-          return {
-            title: keyName,
-            description: fetchRes.data[keyName],
-          };
+      if (router.query.id) {
+        const fetchRes = await fetchData({
+          method: 'GET',
+          url: `/users/${router.query.id}`,
         });
-        setUserData(userDesc);
+        if (fetchRes.code === '200') {
+          const userDesc = Object.keys(fetchRes.data).map((keyName: string) => {
+            return {
+              title: keyName,
+              description: fetchRes.data[keyName],
+            };
+          });
+          setUserData(userDesc);
+        }
       }
     })();
     // return () => {
     // }
-  }, []);
+  }, [router.query.id]);
 
   const passwordModal = passwordModalCtrl ? (
     <EuiOverlayMask>
@@ -49,7 +55,11 @@ const User: React.FC = () => {
           <EuiModalHeaderTitle>Update Password</EuiModalHeaderTitle>
         </EuiModalHeader>
         <EuiModalBody>
-          <UpdatePasswordForm formObj={updatePasswordForm} />
+          <UpdatePasswordForm
+            formObj={updatePasswordForm}
+            addToast={addToast}
+            onCloseModal={() => setPasswordModalCtrl(false)}
+          />
         </EuiModalBody>
       </EuiModal>
     </EuiOverlayMask>
@@ -65,7 +75,11 @@ const User: React.FC = () => {
           listItems={userData}
           style={{ maxWidth: '400px' }}
         />
-        <EuiButton onClick={() => setPasswordModalCtrl(true)}>
+        <EuiButton
+          onClick={() => {
+            updatePasswordForm.setValue('user_id', router.query.id);
+            setPasswordModalCtrl(true);
+          }}>
           Update Password
         </EuiButton>
       </div>
