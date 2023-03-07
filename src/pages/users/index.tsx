@@ -1,10 +1,12 @@
 import React, { useState, useEffect } from 'react';
+import { useRouter } from 'next/router';
 import Head from 'next/head';
 import {
   EuiBasicTable,
   EuiPagination,
   EuiFlexGroup,
   EuiFlexItem,
+  EuiLink,
 } from '@elastic/eui';
 import fetchData from '@/lib/fetch';
 
@@ -18,6 +20,7 @@ interface Pagination {
 }
 
 const Users: React.FC = () => {
+  const router = useRouter();
   const [pagination, setPagination] = useState<Pagination>({
     page: 1,
     page_size: 10,
@@ -34,6 +37,14 @@ const Users: React.FC = () => {
     {
       field: 'name',
       name: 'Name',
+    },
+    {
+      name: 'Action',
+      render: record => (
+        <EuiLink onClick={() => router.push(`/users/${record.id}`)}>
+          View
+        </EuiLink>
+      ),
     },
   ];
 
@@ -70,11 +81,13 @@ const Users: React.FC = () => {
         />
         <EuiFlexGroup justifyContent="spaceBetween">
           <EuiFlexItem grow={false}>Total: {userCount}</EuiFlexItem>
-          <EuiFlexItem grow={false}><EuiPagination
-            pageCount={Math.floor(userCount / pagination.page_size) + 1}
-            activePage={pagination.page}
-            onPageClick={targetPage => console.log(targetPage)}
-          /></EuiFlexItem>
+          <EuiFlexItem grow={false}>
+            <EuiPagination
+              pageCount={Math.floor(userCount / pagination.page_size) + 1}
+              activePage={pagination.page}
+              onPageClick={targetPage => console.log(targetPage)}
+            />
+          </EuiFlexItem>
         </EuiFlexGroup>
       </div>
     </>

@@ -1,36 +1,43 @@
+import React, { useState, useEffect } from 'react';
 import { useRouter } from 'next/router';
-import { EuiDescriptionList, EuiSpacer, EuiTitle } from '@elastic/eui';
-
-// export async function getServerSideProps() {
-//   // Fetch data from external API
-//   const res = await fetch(`https://.../data`)
-//   const data = await res.json()
-
-//   // Pass data to the page via props
-//   return { props: { data } };
-// }
-
-// export const getStaticProps: GetStaticProps<IUserUrl, IUserUrl> = async ({
-//   params,
-// }) => {
-//   return {
-//     props: {
-//       id: params!.id,
-//     },
-//   };
-// };
+import { EuiDescriptionList } from '@elastic/eui';
+import fetchData from '@/lib/fetch';
 
 const User: React.FC = () => {
   const router = useRouter();
-  const userId = router.query.id as string;
+  const [userData, setUserData] = useState<[]>([]);
+
+  useEffect(() => {
+    (async () => {
+      const fetchRes = await fetchData({
+        method: 'GET',
+        url: `/users/${router.query.id}`,
+      });
+      if (fetchRes.code === '200') {
+        const userDesc = Object.keys(fetchRes.data).map((keyName: string) => {
+          return {
+            title: keyName,
+            description: fetchRes.data[keyName],
+          };
+        });
+        setUserData(userDesc);
+      }
+    })();
+    // return () => {
+    // }
+  }, []);
+
   return (
     <>
-      <div>user_id: {userId}</div>
-      <EuiDescriptionList
-        type="column"
-        // listItems={favoriteVideoGames}
-        style={{ maxWidth: '400px' }}
-      />
+      <div className="page-container">
+        <h1 className="page-header">User Detail</h1>
+        <div>Param: user_id {router.query.id}</div>
+        <EuiDescriptionList
+          type="column"
+          listItems={userData}
+          style={{ maxWidth: '400px' }}
+        />
+      </div>
     </>
   );
 };
