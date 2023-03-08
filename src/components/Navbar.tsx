@@ -1,11 +1,9 @@
 import React, { useState, useEffect } from 'react';
 import { AuthUserType } from '@/lib/types';
 import storage from '@/lib/storage';
-
 import {
   EuiHeader,
   EuiHeaderSectionItem,
-  EuiHeaderLogo,
   EuiHeaderLinks,
   EuiHeaderLink,
 } from '@elastic/eui';
@@ -28,11 +26,16 @@ const Navbar: React.FC = () => {
   return (
     <EuiHeader>
       <EuiHeaderSectionItem border="right">
-        <EuiHeaderLogo href="#">Rust Learn</EuiHeaderLogo>
+        <EuiHeaderLink iconType="/images/rust.svg" href="#">
+          Home
+        </EuiHeaderLink>
+        <EuiHeaderLink href="/users" isActive>
+          Users
+        </EuiHeaderLink>
       </EuiHeaderSectionItem>
       <EuiHeaderLinks>
         <EuiHeaderLink href="/users" isActive>
-          Users
+          Hi, {authUser.name}
         </EuiHeaderLink>
       </EuiHeaderLinks>
     </EuiHeader>

@@ -12,6 +12,7 @@ import {
 } from '@elastic/eui';
 import fetchData from '@/lib/fetch';
 import UpdatePasswordForm from '@/components/UpdatePasswordForm';
+import Navbar from '@/components/Navbar';
 
 interface IOwnProps {
   addToast?: void;
@@ -67,6 +68,7 @@ const User: React.FC<IOwnProps> = ({ addToast }) => {
 
   return (
     <>
+      <Navbar />
       <div className="page-container">
         <h1 className="page-header">User Detail</h1>
         <div>Param: user_id {router.query.id}</div>
