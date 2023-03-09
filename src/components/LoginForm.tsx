@@ -13,15 +13,17 @@ import storage from '@/lib/storage';
 const LoginForm = ({ formObj }) => {
   const { register, formState, handleSubmit, setValue, setError } = formObj;
   const [successCallout, setSuccessCallout] = useState<string | null>(null);
+  const [errorCallout, setErrorCallout] = useState<string | null>(null);
 
   const onSubmit = async data => {
     setSuccessCallout(null);
+    setErrorCallout(null);
     const fetchRes = await fetchData({
       method: 'POST',
       url: `/login`,
       body: data,
     });
-    if (fetchRes.code === 200) {
+    if (fetchRes.code === '200') {
       storage.set(
         'user',
         JSON.stringify({
@@ -30,6 +32,8 @@ const LoginForm = ({ formObj }) => {
         })
       );
       setSuccessCallout(fetchRes.data.name);
+    } else {
+      setErrorCallout(fetchRes.message);
     }
   };
 
@@ -48,10 +52,19 @@ const LoginForm = ({ formObj }) => {
       {successCallout ? (
         <EuiCallOut
           size="s"
-          title="Login Success!"
+          title="Login Success"
           color="success"
           iconType="user">
           <p>Welcome, {successCallout}</p>
+        </EuiCallOut>
+      ) : null}
+      {errorCallout ? (
+        <EuiCallOut
+          size="s"
+          title="Login Failed"
+          color="danger"
+          iconType="user">
+          <p>{errorCallout}</p>
         </EuiCallOut>
       ) : null}
       <EuiForm component="form" onSubmit={handleSubmit(onSubmit)}>
