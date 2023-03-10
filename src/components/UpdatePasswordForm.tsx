@@ -6,6 +6,7 @@ import {
   EuiFieldPassword,
   EuiCallOut,
   EuiSpacer,
+  EuiTextColor,
 } from '@elastic/eui';
 import fetchData from '@/lib/fetch';
 
@@ -48,7 +49,7 @@ const UpdatePasswordForm = ({ formObj, addToast, onCloseModal }) => {
       validate: {
         matchesPreviousPassword: value => {
           const { password } = getValues();
-          return password === value || 'Passwords should match!';
+          return password === value || "Passwords don't match";
         },
       },
     });
@@ -71,18 +72,26 @@ const UpdatePasswordForm = ({ formObj, addToast, onCloseModal }) => {
       <EuiForm component="form" onSubmit={handleSubmit(onSubmit)}>
         <EuiFormRow
           label="Password"
-          helpText={formState.errors.password?.message}>
+          helpText={
+            <EuiTextColor color="danger">
+              {formState.errors.password?.message}
+            </EuiTextColor>
+          }>
           <EuiFieldPassword
             onChange={e => setValue('password', e.target.value)}
-            placeholder="请输入密码"
+            placeholder="Please Input Username"
           />
         </EuiFormRow>
         <EuiFormRow
-          label="Confirm Password"
-          helpText={formState.errors.password_confirm?.message}>
+          label="Password"
+          helpText={
+            <EuiTextColor color="danger">
+              {formState.errors.password_confirm?.message}
+            </EuiTextColor>
+          }>
           <EuiFieldPassword
             onChange={e => setValue('password_confirm', e.target.value)}
-            placeholder="请确认密码"
+            placeholder="Please Input Username"
           />
         </EuiFormRow>
         <EuiButton fill type="submit">

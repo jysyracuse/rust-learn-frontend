@@ -16,7 +16,7 @@ const Login: React.FC = () => {
         <title>Login</title>
       </Head>
       <div className="page-container">
-        <EuiFlexGroup justifyContent="spaceAround" alignItems="center">
+        <EuiFlexGroup justifyContent="spaceAround">
           <EuiFlexItem>
             <EuiPanel>
               <RegisterForm formObj={registerForm} />

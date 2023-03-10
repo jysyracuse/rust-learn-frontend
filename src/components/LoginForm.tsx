@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import {
+  EuiTitle,
   EuiButton,
   EuiFieldText,
   EuiForm,
@@ -48,7 +49,9 @@ const LoginForm = ({ formObj }) => {
 
   return (
     <>
-      <h1>Login</h1>
+      <EuiTitle>
+        <h2>Login</h2>
+      </EuiTitle>
       {successCallout ? (
         <EuiCallOut
           size="s"
