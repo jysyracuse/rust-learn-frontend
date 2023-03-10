@@ -9,6 +9,7 @@ import {
   EuiLink,
 } from '@elastic/eui';
 import fetchData from '@/lib/fetch';
+import Navbar from '@/components/Navbar';
 
 export async function getStaticProps({ params }) {
   return { props: {} };
@@ -70,6 +71,7 @@ const Users: React.FC = () => {
       <Head>
         <title>User Table</title>
       </Head>
+      <Navbar />
       <div className="page-container">
         <h1 className="page-header">User Table</h1>
         <EuiBasicTable

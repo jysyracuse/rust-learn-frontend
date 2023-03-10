@@ -73,7 +73,7 @@ const RegisterForm = ({ formObj }) => {
           />
         </EuiFormRow>
         <EuiFormRow
-          label="Password"
+          label="Confirm Password"
           helpText={
             <EuiTextColor color="danger">
               {formState.errors.password_confirm?.message}
@@ -84,7 +84,9 @@ const RegisterForm = ({ formObj }) => {
             placeholder="Please Input Username"
           />
         </EuiFormRow>
-        <EuiButton type="submit">Register</EuiButton>
+        <EuiButton fill type="submit">
+          Register
+        </EuiButton>
       </EuiForm>
     </>
   );
