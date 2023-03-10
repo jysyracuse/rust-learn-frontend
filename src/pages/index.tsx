@@ -5,7 +5,7 @@ const Index: React.FC = () => {
   return (
     <>
       <Head>
-        <title>Home</title>
+        <title>Rust Learn</title>
       </Head>
       <div>Home Page</div>
       {/* <Wrapper>
