@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import { useRouter } from 'next/router';
 import { AuthUserType } from '@/lib/types';
 import storage from '@/lib/storage';
 import {
@@ -9,6 +10,7 @@ import {
 } from '@elastic/eui';
 
 const Navbar: React.FC = () => {
+  const router = useRouter();
   const [authUser, setAuthUser] = useState<AuthUserType>({
     id: null,
     name: null,
@@ -26,10 +28,15 @@ const Navbar: React.FC = () => {
   return (
     <EuiHeader>
       <EuiHeaderSectionItem border="right">
-        <EuiHeaderLink iconType="/images/rust.svg" href="#">
+        <EuiHeaderLink
+          iconType="/images/rust.svg"
+          href="/"
+          isActive={router.pathname == '/'}>
           Home
         </EuiHeaderLink>
-        <EuiHeaderLink href="/users" isActive>
+        <EuiHeaderLink
+          href="/users"
+          isActive={router.pathname.startsWith('/users')}>
           Users
         </EuiHeaderLink>
       </EuiHeaderSectionItem>

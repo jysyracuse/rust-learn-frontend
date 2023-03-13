@@ -87,7 +87,12 @@ const Users: React.FC = () => {
             <EuiPagination
               pageCount={Math.floor(userCount / pagination.page_size) + 1}
               activePage={pagination.page}
-              onPageClick={targetPage => console.log(targetPage)}
+              onPageClick={targetPage =>
+                setPagination({
+                  page_size: pagination.page_size,
+                  page: targetPage,
+                })
+              }
             />
           </EuiFlexItem>
         </EuiFlexGroup>
