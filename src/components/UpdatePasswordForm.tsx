@@ -13,7 +13,6 @@ import fetchData from '@/lib/fetch';
 const UpdatePasswordForm = ({ formObj, addToast, onCloseModal }) => {
   const { register, formState, handleSubmit, setValue, getValues } = formObj;
   const onSubmit = async data => {
-    console.log(JSON.stringify(data, null, 2));
     const userId = data.user_id;
     delete data.user_id;
     const fetchRes = await fetchData({

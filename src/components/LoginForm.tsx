@@ -7,6 +7,8 @@ import {
   EuiFormRow,
   EuiFieldPassword,
   EuiCallOut,
+  EuiTextColor,
+  EuiSpacer,
 } from '@elastic/eui';
 import fetchData from '@/lib/fetch';
 import storage from '@/lib/storage';
@@ -52,6 +54,7 @@ const LoginForm = ({ formObj }) => {
       <EuiTitle>
         <h2>Login</h2>
       </EuiTitle>
+      <EuiSpacer />
       {successCallout ? (
         <EuiCallOut
           size="s"
@@ -71,7 +74,13 @@ const LoginForm = ({ formObj }) => {
         </EuiCallOut>
       ) : null}
       <EuiForm component="form" onSubmit={handleSubmit(onSubmit)}>
-        <EuiFormRow label="Username" helpText={formState.errors.name?.message}>
+        <EuiFormRow
+          label="Name"
+          helpText={
+            <EuiTextColor color="danger">
+              {formState.errors.name?.message}
+            </EuiTextColor>
+          }>
           <EuiFieldText
             onChange={e => setValue('name', e.target.value)}
             placeholder="Please Input Username"
@@ -79,10 +88,14 @@ const LoginForm = ({ formObj }) => {
         </EuiFormRow>
         <EuiFormRow
           label="Password"
-          helpText={formState.errors.password?.message}>
+          helpText={
+            <EuiTextColor color="danger">
+              {formState.errors.password?.message}
+            </EuiTextColor>
+          }>
           <EuiFieldPassword
             onChange={e => setValue('password', e.target.value)}
-            placeholder="Please Input Password"
+            placeholder="Please Input Username"
           />
         </EuiFormRow>
         <EuiButton fill type="submit">

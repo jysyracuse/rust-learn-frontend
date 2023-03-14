@@ -9,13 +9,17 @@ import {
   EuiModalHeaderTitle,
   EuiOverlayMask,
   EuiButton,
+  EuiButtonEmpty,
+  EuiFlexItem,
+  EuiFlexGroup,
+  EuiSpacer,
 } from '@elastic/eui';
 import fetchData from '@/lib/fetch';
 import UpdatePasswordForm from '@/components/UpdatePasswordForm';
 import Navbar from '@/components/Navbar';
 
 interface IOwnProps {
-  addToast?: void;
+  addToast?: any; //?
   children?: React.ReactNode;
 }
 
@@ -23,6 +27,28 @@ const User: React.FC<IOwnProps> = ({ addToast }) => {
   const router = useRouter();
   const [userData, setUserData] = useState<any[]>([]);
   const [passwordModalCtrl, setPasswordModalCtrl] = useState<boolean>(false);
+  const [deleteModalCtrl, setDeleteModalCtrl] = useState<boolean>(false);
+
+  const deleteUser = async (userId: string | string[]) => {
+    const fetchRes = await fetchData({
+      method: 'DELETE',
+      url: `/users/${userId}`,
+    });
+    if (fetchRes.code === '200') {
+      addToast({
+        title: 'UserDeleted',
+        color: 'success',
+      });
+      router.push('/users');
+    } else {
+      addToast({
+        title: 'Query Failed',
+        color: 'danger',
+        text: fetchRes.message,
+      });
+    }
+  };
+
   const updatePasswordForm = useForm();
   // const { addToast } = props;
   useEffect(() => {
@@ -40,6 +66,12 @@ const User: React.FC<IOwnProps> = ({ addToast }) => {
             };
           });
           setUserData(userDesc);
+        } else {
+          addToast({
+            title: 'Query Failed',
+            color: 'danger',
+            text: fetchRes.message,
+          });
         }
       }
     })();
@@ -66,6 +98,39 @@ const User: React.FC<IOwnProps> = ({ addToast }) => {
     </EuiOverlayMask>
   ) : null;
 
+  const deleteModal = deleteModalCtrl ? (
+    <EuiOverlayMask>
+      <EuiModal
+        onClose={() => setDeleteModalCtrl(false)}
+        initialFocus="[name=popswitch]">
+        <EuiModalHeader>
+          <EuiModalHeaderTitle>Delete User</EuiModalHeaderTitle>
+        </EuiModalHeader>
+        <EuiModalBody>
+          <p>Are you sure to delete this user?</p>
+          <EuiSpacer />
+          <EuiFlexGroup>
+            <EuiFlexItem grow={false}>
+              <EuiButton
+                color="danger"
+                fill
+                onClick={() => deleteUser(router.query.id)}>
+                Delete
+              </EuiButton>
+            </EuiFlexItem>
+            <EuiFlexItem grow={false}>
+              <EuiButtonEmpty
+                color="text"
+                onClick={() => setDeleteModalCtrl(false)}>
+                Cancel
+              </EuiButtonEmpty>
+            </EuiFlexItem>
+          </EuiFlexGroup>
+        </EuiModalBody>
+      </EuiModal>
+    </EuiOverlayMask>
+  ) : null;
+
   return (
     <>
       <Navbar />
@@ -77,15 +142,26 @@ const User: React.FC<IOwnProps> = ({ addToast }) => {
           listItems={userData}
           style={{ maxWidth: '400px' }}
         />
-        <EuiButton
-          onClick={() => {
-            updatePasswordForm.setValue('user_id', router.query.id);
-            setPasswordModalCtrl(true);
-          }}>
-          Update Password
-        </EuiButton>
+        <EuiSpacer />
+        <EuiFlexGroup>
+          <EuiFlexItem grow={false}>
+            <EuiButton
+              onClick={() => {
+                updatePasswordForm.setValue('user_id', router.query.id);
+                setPasswordModalCtrl(true);
+              }}>
+              Update Password
+            </EuiButton>
+          </EuiFlexItem>
+          <EuiFlexItem grow={false}>
+            <EuiButton color="danger" onClick={() => setDeleteModalCtrl(true)}>
+              Delete
+            </EuiButton>
+          </EuiFlexItem>
+        </EuiFlexGroup>
       </div>
       {passwordModal}
+      {deleteModal}
     </>
   );
 };
