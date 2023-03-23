@@ -50,6 +50,30 @@ const Users: React.FC = () => {
   const [userList, setUserList] = useState<[]>([]);
   const [userCount, setUserCount] = useState<number>(0);
 
+  const getUsers = async (pag, fil) => {
+    const fetchRes = await fetchData({
+      method: 'GET',
+      url: `/users`,
+      qs: {
+        ...pag,
+        ...fil,
+      },
+    });
+    setUserList(fetchRes.data.list);
+    setUserCount(fetchRes.data.count);
+  };
+
+  const updateUserStatus = async (userId, status) => {
+    const fetchRes = await fetchData({
+      method: 'POST',
+      url: `/users/${userId}/update_status`,
+      body: {
+        status,
+      },
+    });
+    getUsers(pagination, filter);
+  };
+
   const columns = [
     {
       field: 'id',
@@ -70,23 +94,17 @@ const Users: React.FC = () => {
           <EuiLink onClick={() => router.push(`/users/${record.id}`)}>
             View
           </EuiLink>
+          &nbsp;|&nbsp;
+          <EuiLink
+            onClick={() =>
+              updateUserStatus(record.id, record.status === 0 ? 1 : 0)
+            }>
+            {record.status === 0 ? 'Activate' : 'Pause'}
+          </EuiLink>
         </span>
       ),
     },
   ];
-
-  const getUsers = async (pag, fil) => {
-    const fetchRes = await fetchData({
-      method: 'GET',
-      url: `/users`,
-      qs: {
-        ...pag,
-        ...fil,
-      },
-    });
-    setUserList(fetchRes.data.list);
-    setUserCount(fetchRes.data.count);
-  };
 
   useEffect(() => {
     getUsers(pagination, filter);
