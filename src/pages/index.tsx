@@ -9,10 +9,8 @@ const Index: React.FC = () => {
         <title>Rust Learn</title>
       </Head>
       <Navbar />
-      <div>Home Page</div>
-      {/* <Wrapper>
-        
-      </Wrapper> */}
+      <div># Hello, *world*!</div>
+      <div>This is a test page for rust learn</div>
     </>
   );
 };

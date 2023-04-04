@@ -5,6 +5,7 @@ export const globalStyles = css`
     height: 100%;
     width: 100%;
   }
+
   .page-container {
     min-height: 100%;
     height: 100%;
